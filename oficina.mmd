@@ -1,0 +1,69 @@
+erDiagram
+    CLIENTE ||--|{ VEICULO : "possui"
+    VEICULO ||--o{ ORDEM_SERVICO : "recebe"
+    EQUIPE ||--|{ MECANICO : "é formada por"
+    EQUIPE ||--o{ ORDEM_SERVICO : "avalia e executa"
+    ORDEM_SERVICO ||--o{ OS_SERVICO : "lista"
+    SERVICO ||--o{ OS_SERVICO : "aparece em"
+    ORDEM_SERVICO ||--o{ OS_PECA : "usa"
+    PECA ||--o{ OS_PECA : "aparece em"
+
+    CLIENTE {
+        int idCliente PK
+        string nome
+        char cpf UK
+        string telefone
+        string endereco
+    }
+    VEICULO {
+        int idVeiculo PK
+        int idCliente FK
+        string placa UK
+        string marca
+        string modelo
+        int ano
+    }
+    EQUIPE {
+        int idEquipe PK
+        string nome
+    }
+    MECANICO {
+        int codigo PK
+        int idEquipe FK
+        string nome
+        string endereco
+        string especialidade
+    }
+    ORDEM_SERVICO {
+        int numeroOS PK
+        int idVeiculo FK
+        int idEquipe FK
+        enum tipo "Conserto ou Revisão"
+        date dataEmissao
+        decimal valorTotal "serviços + peças"
+        enum status "Em avaliação, Aguardando autorização, Autorizada, Em execução, Concluída, Cancelada"
+        bool autorizadaCliente
+        date dataEntrega "data prevista para conclusão"
+    }
+    SERVICO {
+        int idServico PK
+        string descricao
+        decimal valorMaoDeObra "tabela de referência"
+    }
+    OS_SERVICO {
+        int numeroOS PK, FK
+        int idServico PK, FK
+        int quantidade
+        decimal valor "valor cobrado nesta OS"
+    }
+    PECA {
+        int idPeca PK
+        string descricao
+        decimal valorUnitario
+    }
+    OS_PECA {
+        int numeroOS PK, FK
+        int idPeca PK, FK
+        int quantidade
+        decimal valorUnitario "preço no dia da OS"
+    }
